@@ -9,4 +9,4 @@
 1. *The countdown number was computed from two different clocks.* The first version set `expires_at` with the database's `now()` but computed `expiresInSeconds` in Node with `Date.now()`. A test expecting at most 2 seconds left on a 2-second hold got 3. Comparing the clocks showed the database container was 67 ms ahead of Node, enough for `Math.ceil` to round up. That is exactly the "two clocks disagree" problem the brief warns about for the screen, just on the server side. Fixed by computing the remaining time in SQL from the same clock (`expires_at - clock_timestamp()`).
 2. *Async errors in Express 4.* The first draft used Express 4, whose route handlers don't pass a rejected promise to the error middleware: a thrown "insufficient stock" would have become an unhandled rejection and a hung request instead of a 409. Caught on review before running it; switched to Express 5, which handles async errors.
 
-_[Aman: add one line in your own words about what you reviewed or changed.]_
+I reviewed the locking and webhook logic, ran the tests and the full flow myself, and chose the late-payment rule.
