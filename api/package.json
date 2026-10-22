@@ -1,0 +1,22 @@
+{
+  "name": "pickup-counter-api",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=23.6" },
+  "scripts": {
+    "start": "node src/main.ts",
+    "test": "node --test --test-concurrency=1 \"test/*.test.ts\"",
+    "typecheck": "tsc --noEmit",
+    "send-webhook": "node scripts/send-webhook.ts"
+  },
+  "dependencies": {
+    "express": "5.1.0",
+    "pg": "8.13.1"
+  },
+  "devDependencies": {
+    "@types/express": "5.0.1",
+    "@types/node": "22.10.2",
+    "@types/pg": "8.11.10",
+    "typescript": "5.8.3"
+  }
+}

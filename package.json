@@ -1,0 +1,9 @@
+{
+  "name": "pickup-counter",
+  "private": true,
+  "description": "Convenience scripts. The app itself runs with: docker compose up --build",
+  "scripts": {
+    "send-webhook": "node api/scripts/send-webhook.ts",
+    "test": "docker compose run --rm app node --test --test-concurrency=1 \"test/*.test.ts\""
+  }
+}

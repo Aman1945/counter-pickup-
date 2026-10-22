@@ -1,0 +1,32 @@
+services:
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: pickup
+      POSTGRES_PASSWORD: pickup
+      POSTGRES_DB: pickup
+    ports: ["5433:5432"]
+    volumes:
+      - db-data:/var/lib/postgresql/data
+      - ./db/create-test-db.sql:/docker-entrypoint-initdb.d/create-test-db.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U pickup -d pickup"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+  app:
+    build: .
+    environment:
+      DATABASE_URL: postgres://pickup:pickup@db:5432/pickup
+      TEST_DATABASE_URL: postgres://pickup:pickup@db:5432/pickup_test
+      # Local development secret only. In any real deployment this comes from a secret store.
+      WEBHOOK_SECRET: ${WEBHOOK_SECRET:-local-dev-secret}
+      HOLD_SECONDS: ${HOLD_SECONDS:-120}
+      WEB_DIR: /app/web-dist
+    ports: ["3000:3000"]
+    depends_on:
+      db: { condition: service_healthy }
+
+volumes:
+  db-data:
